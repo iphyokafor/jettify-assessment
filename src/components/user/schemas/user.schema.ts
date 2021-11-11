@@ -7,20 +7,21 @@ export const UserSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
       minlength: 3,
-      maxlength: 30,
+      maxlength: 20,
+      unique: true,
     },
 
     first_name: {
       type: String,
       lowercase: true,
       minlength: 3,
-      maxlength: 30,
+      maxlength: 20,
     },
     last_name: {
       type: String,
       lowercase: true,
       minlength: 3,
-      maxlength: 30,
+      maxlength: 20,
     },
     email: {
       type: String,
@@ -29,6 +30,7 @@ export const UserSchema = new mongoose.Schema(
       required: true,
       trim: true,
       unique: true,
+      match: [/\S+@\S+\.\S+/, 'is invalid'],
     },
     phone_number: {
       type: Number,
