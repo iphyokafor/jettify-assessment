@@ -1,3 +1,5 @@
+import { CreateWalletDto } from 'src/components/wallet/dto/create-wallet.dto';
+
 export class BaseUserDto {
   username: string;
   first_name: string;
@@ -5,4 +7,5 @@ export class BaseUserDto {
   email: string;
   phone_number: number;
   password: string;
+  wallet: CreateWalletDto;
 }

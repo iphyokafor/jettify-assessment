@@ -6,18 +6,21 @@ export const UserSchema = new mongoose.Schema(
     username: {
       type: String,
       lowercase: true,
-      maxlength: 50,
+      minlength: 3,
+      maxlength: 30,
     },
 
     first_name: {
       type: String,
       lowercase: true,
-      maxlength: 50,
+      minlength: 3,
+      maxlength: 30,
     },
     last_name: {
       type: String,
       lowercase: true,
-      maxlength: 50,
+      minlength: 3,
+      maxlength: 30,
     },
     email: {
       type: String,
