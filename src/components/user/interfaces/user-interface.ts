@@ -1,20 +1,13 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { Document } from 'mongoose';
 import { CreateWalletDto } from 'src/components/wallet/dto/create-wallet.dto';
+import { CreateUserDto } from '../dto/create-user.dto';
 
-export class BaseUserDto {
-  @ApiProperty()
-  readonly _id: string;
-  @ApiProperty()
+export interface IUser extends Document {
   readonly username: string;
-  @ApiProperty()
   readonly first_name: string;
-  @ApiProperty()
   readonly last_name: string;
-  @ApiProperty()
   readonly email: string;
-  @ApiProperty()
   readonly phone_number: number;
-  @ApiProperty()
   password: string;
   readonly wallet: CreateWalletDto;
 }

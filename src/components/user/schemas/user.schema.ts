@@ -1,4 +1,6 @@
 import * as mongoose from 'mongoose';
+import * as bcrypt from 'bcrypt';
+
 const { Schema } = mongoose;
 
 export const UserSchema = new mongoose.Schema(
@@ -39,6 +41,8 @@ export const UserSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+      trim: true,
+      minlength: 8,
     },
     wallet: {
       type: Schema.Types.ObjectId,
@@ -51,36 +55,15 @@ export const UserSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-// import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-// import { Document } from 'mongoose';
-
-// export type UserDocument = User & Document;
-
-// @Schema()
-// export class User {
-//   @Prop({ required: true })
-//   username: string;
-
-//   @Prop({ required: true })
-//   first_name: string;
-
-//   @Prop({ required: true })
-//   last_name: string;
-
-//   @Prop({ required: true })
-//   email: string;
-
-//   @Prop({ required: true })
-//   phone_number: number;
-
-//   @Prop({ required: true })
-//   password: string;
-
-//   @Prop({ required: true })
-//   createdAt: Date;
-
-//   @Prop()
-//   deletedAt?: Date;
-// }
-
-// export const UserSchema = SchemaFactory.createForClass(User);
+UserSchema.pre('save', async function (next) {
+  try {
+    if (!this.isModified('password')) {
+      return next();
+    }
+    const hashed = await bcrypt.hash(this['password'], 10);
+    this['password'] = hashed;
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+});

@@ -1,6 +1,6 @@
-import { BaseUserDto } from 'src/components/user/dto/base-user.dto';
+import { CreateUserDto } from 'src/components/user/dto/create-user.dto';
 
 export class CreateWalletDto {
-  user: BaseUserDto;
-  balance: number;
+  readonly user: CreateUserDto;
+  readonly balance: number;
 }
