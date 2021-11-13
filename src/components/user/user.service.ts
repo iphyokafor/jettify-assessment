@@ -19,45 +19,6 @@ export class UserService {
     @InjectConnection() private readonly connection: mongoose.Connection,
   ) {}
   async create(createUserDto: CreateUserDto) {
-    // const session = await this.connection.startSession();
-    // session.startTransaction();
-    // try {
-    //   const { email, username } = createUserDto;
-    //   const user = await this.userModel.findOne({
-    //     $or: [{ email }, { username }],
-    //   });
-    //   if (user) {
-    //     throw new HttpException('User already exists', HttpStatus.CONFLICT);
-    //   }
-    //   const createdUser = new this.userModel(createUserDto);
-    //   const createWallet = new this.walletModel({ user: createdUser._id });
-    //   const userWallet = await createWallet.save();
-    //   createdUser.wallet = userWallet._id;
-    //   await createdUser.save();
-    //   await session.commitTransaction();
-    //   return this.sanitizeUser(createdUser);
-    // } catch (error) {
-    //   await session.abortTransaction();
-    // } finally {
-    //   session.endSession();
-    // }
-    // await session.withTransaction(async () => {
-    //   const { email, username } = createUserDto;
-    //   const user = await this.userModel.findOne({
-    //     $or: [{ email }, { username }],
-    //   });
-    //   if (user) {
-    //     throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
-    //   }
-    //   const createdUser = new this.userModel(createUserDto);
-    //   const createWallet = new this.walletModel({ user: createdUser._id });
-    //   const userWallet = await createWallet.save();
-    //   createdUser.wallet = userWallet._id;
-    //   await createdUser.save();
-    //   return this.sanitizeUser(createdUser);
-    // });
-    // session.endSession();
-
     const { email, username } = createUserDto;
     const user = await this.userModel.findOne({
       $or: [{ email }, { username }],
