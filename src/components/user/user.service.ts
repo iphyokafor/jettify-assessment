@@ -24,7 +24,7 @@ export class UserService {
       $or: [{ email }, { username }],
     });
     if (user) {
-      throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+      throw new HttpException('User already exists', HttpStatus.CONFLICT);
     }
     const createdUser = new this.userModel(createUserDto);
     const createWallet = new this.walletModel({ user: createdUser._id });

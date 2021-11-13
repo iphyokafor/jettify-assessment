@@ -38,7 +38,7 @@ export class WalletController {
     return this.walletService.findAll();
   }
 
-  @Get('userWallet-detail/:id')
+  @Get(':id')
   @UseGuards(AuthGuard('jwt'))
   async getUserWalletDetails(@Param('id') id: string) {
     return this.walletService.findOne(id);

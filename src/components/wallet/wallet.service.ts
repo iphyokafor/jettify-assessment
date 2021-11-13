@@ -44,7 +44,7 @@ export class WalletService {
         },
       },
       {
-        upsert: true,
+        new: true,
       },
     );
 
@@ -87,7 +87,7 @@ export class WalletService {
         },
       },
       {
-        upsert: true,
+        new: true,
       },
     );
 
