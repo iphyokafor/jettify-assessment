@@ -1,7 +1,16 @@
 import * as mongoose from 'mongoose';
+import { IWallet } from 'src/components/wallet/schemas/wallet.schema';
 const { Schema } = mongoose;
 
-export const TransactionSchema = new mongoose.Schema(
+export interface ITransactionLog extends mongoose.Document {
+  wallet: IWallet['_id'];
+  amount: number;
+  transaction_type: string;
+  service: string;
+  created_at: Date;
+}
+
+const TransactionLogSchema = new mongoose.Schema(
   {
     wallet: {
       type: Schema.Types.ObjectId,
@@ -20,8 +29,7 @@ export const TransactionSchema = new mongoose.Schema(
 
     service: {
       type: String,
-      enum: ['Amazon', 'Netflix', 'Ebay', 'Jumia'],
-      default: 'None',
+      enum: ['Amazon', 'Netflix', 'Ebay', 'Jumia', 'None'],
     },
 
     created_at: {
@@ -30,3 +38,5 @@ export const TransactionSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+export const TransactionModel = TransactionLogSchema;

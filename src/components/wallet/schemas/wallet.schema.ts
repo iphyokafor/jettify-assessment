@@ -1,7 +1,13 @@
 import * as mongoose from 'mongoose';
+import { IUser } from '../../../components/user/schemas/user.schema';
 const { Schema } = mongoose;
 
-export const WalletSchema = new mongoose.Schema(
+export interface IWallet extends mongoose.Document {
+  user: IUser['_id'];
+  balance: number;
+}
+
+const WalletSchema = new mongoose.Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -15,3 +21,5 @@ export const WalletSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+export const WalletModel = WalletSchema;

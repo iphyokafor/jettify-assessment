@@ -1,9 +1,20 @@
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { IWallet } from '../../../components/wallet/schemas/wallet.schema';
 
 const { Schema } = mongoose;
 
-export const UserSchema = new mongoose.Schema(
+export interface IUser extends mongoose.Document {
+  username: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone_number: number;
+  password: string;
+  wallet: IWallet['_id'];
+}
+
+const UserSchema = new Schema(
   {
     username: {
       type: String,
@@ -11,6 +22,7 @@ export const UserSchema = new mongoose.Schema(
       minlength: 3,
       maxlength: 20,
       unique: true,
+      required: true,
     },
 
     first_name: {
@@ -18,12 +30,14 @@ export const UserSchema = new mongoose.Schema(
       lowercase: true,
       minlength: 3,
       maxlength: 20,
+      required: true,
     },
     last_name: {
       type: String,
       lowercase: true,
       minlength: 3,
       maxlength: 20,
+      required: true,
     },
     email: {
       type: String,
@@ -37,6 +51,7 @@ export const UserSchema = new mongoose.Schema(
     phone_number: {
       type: Number,
       maxlength: 11,
+      required: true,
     },
     password: {
       type: String,
@@ -55,7 +70,7 @@ export const UserSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-UserSchema.pre('save', async function (next) {
+UserSchema.pre<IUser>('save', async function (next) {
   try {
     if (!this.isModified('password')) {
       return next();
@@ -67,3 +82,6 @@ UserSchema.pre('save', async function (next) {
     return next(err);
   }
 });
+
+export const UserModel = UserSchema;
+// export const UserModel = mongoose.model<IUser>('User', UserSchema);

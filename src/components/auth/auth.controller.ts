@@ -22,8 +22,8 @@ export class AuthController {
   async login(@Body() loginDto: LoginDto) {
     const user = await this.userService.findByCredentials(loginDto);
     const payload = {
-      _id: user._id,
-      wallet: user.wallet,
+      userId: user._id,
+      walletId: user.wallet,
     };
 
     const token = await this.authService.signPayload(payload);

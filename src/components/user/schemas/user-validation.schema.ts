@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-export const spaceShipSchema = Joi.object({
+export const createUserSchema = Joi.object({
   username: Joi.string().alphanum().min(3).max(20).required(),
   first_name: Joi.string().min(3).max(20).required(),
   last_name: Joi.string().min(3).max(20).required(),

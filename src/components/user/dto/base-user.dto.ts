@@ -16,5 +16,5 @@ export class BaseUserDto {
   readonly phone_number: number;
   @ApiProperty()
   password: string;
-  readonly wallet: CreateWalletDto;
+  wallet: CreateWalletDto;
 }

@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   UseGuards,
+  UsePipes,
+  Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,6 +21,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
+import { JoiValidationPipe } from 'src/validation/joi-validation-pipe';
+import { createUserSchema } from './schemas/user-validation.schema';
 
 @ApiTags('users')
 @Controller('user')
@@ -32,12 +36,14 @@ export class UserController {
   @ApiNotFoundResponse()
   @ApiBadRequestResponse()
   @Post('register')
+  // @UsePipes(new JoiValidationPipe(createUserSchema))
   async register(@Body() createUserDto: CreateUserDto) {
     const user = await this.userService.create(createUserDto);
     const payload = {
-      _id: user._id,
-      wallet: user.wallet,
+      userId: user._id,
+      walletId: user.wallet,
     };
+
     const token = await this.authService.signPayload(payload);
     return { user, token };
   }

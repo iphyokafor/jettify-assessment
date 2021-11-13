@@ -1,15 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { WalletService } from './wallet.service';
-import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
+import { FundWalletDto } from './dto/fund-wallet.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { PaymentDto } from './dto/payment-dto';
 
 @Controller('wallet')
 export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 
-  @Post()
-  create(@Body() createWalletDto: CreateWalletDto) {
-    return this.walletService.create(createWalletDto);
+  @Post('fund')
+  @UseGuards(AuthGuard('jwt'))
+  fundUserWallet(@Body() fundWalletDto: FundWalletDto, @Request() req) {
+    const userId = req.user._id;
+    return this.walletService.fundWallet(fundWalletDto, userId);
+  }
+
+  @Post('payment')
+  @UseGuards(AuthGuard('jwt'))
+  makeServicePayment(@Body() paymentDto: PaymentDto, @Request() req) {
+    const userId = req.user._id;
+    return this.walletService.makePayment(paymentDto, userId);
   }
 
   @Get()
@@ -17,9 +38,10 @@ export class WalletController {
     return this.walletService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.walletService.findOne(+id);
+  @Get('userWallet-detail/:id')
+  @UseGuards(AuthGuard('jwt'))
+  async getUserWalletDetails(@Param('id') id: string) {
+    return this.walletService.findOne(id);
   }
 
   @Patch(':id')
