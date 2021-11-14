@@ -26,12 +26,19 @@ export class UserService {
     if (user) {
       throw new HttpException('User already exists', HttpStatus.CONFLICT);
     }
-    const createdUser = new this.userModel(createUserDto);
-    const createWallet = new this.walletModel({ user: createdUser._id });
-    const userWallet = await createWallet.save();
-    createdUser.wallet = userWallet._id;
-    await createdUser.save();
-    return this.sanitizeUser(createdUser);
+    const session = await this.connection.startSession();
+    await session.withTransaction(async () => {
+      const createdUser = new this.userModel(createUserDto);
+      const createWallet = new this.walletModel({ user: createdUser._id });
+      const userWallet = await createWallet.save();
+      createdUser.wallet = userWallet._id;
+      await createdUser.save();
+    });
+    session.endSession();
+    const returnedUser = await this.userModel.findOne({
+      email,
+    });
+    return this.sanitizeUser(returnedUser);
   }
 
   async findByPayload(payload: Payload) {

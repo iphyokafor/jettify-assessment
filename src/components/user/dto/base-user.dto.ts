@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CreateWalletDto } from 'src/components/wallet/dto/create-wallet.dto';
 
 export class BaseUserDto {
   @ApiProperty()
@@ -16,5 +15,5 @@ export class BaseUserDto {
   readonly phone_number: number;
   @ApiProperty()
   password: string;
-  wallet: CreateWalletDto;
+  wallet: string;
 }
