@@ -21,8 +21,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { JoiValidationPipe } from 'src/validation/joi-validation-pipe';
-import { createUserSchema } from './schemas/user-validation.schema';
+import { UserValidatorPipe } from 'src/validation/validation-pipe/joi-validation-pipe';
 
 @ApiTags('users')
 @Controller('user')
@@ -36,7 +35,7 @@ export class UserController {
   @ApiNotFoundResponse()
   @ApiBadRequestResponse()
   @Post('register')
-  // @UsePipes(new JoiValidationPipe(createUserSchema))
+  @UsePipes(new UserValidatorPipe())
   async register(@Body() createUserDto: CreateUserDto) {
     const user = await this.userService.create(createUserDto);
     const payload = {
