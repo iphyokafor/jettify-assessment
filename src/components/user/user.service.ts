@@ -61,12 +61,8 @@ export class UserService {
   }
 
   async findOneUser(id: string) {
-    const user = await this.userModel.findOne({ _id: id });
-    if (!user) {
-      throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
-    }
-    const userDetails = this.sanitizeUser(user);
-    return userDetails;
+    const userDetails = await this.userModel.findOne({ _id: id });
+    return this.sanitizeUser(userDetails);
   }
 
   findAll() {

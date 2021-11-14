@@ -34,8 +34,5 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-npm-debug.log
-.DS_Store
-
 #Env - variables
 .env
