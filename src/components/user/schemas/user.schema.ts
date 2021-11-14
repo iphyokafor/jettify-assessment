@@ -2,7 +2,8 @@ import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { IWallet } from '../../../components/wallet/schemas/wallet.schema';
 
-const { Schema } = mongoose;
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ApiProperty } from '@nestjs/swagger';
 
 export interface IUser extends mongoose.Document {
   username: string;
@@ -14,63 +15,55 @@ export interface IUser extends mongoose.Document {
   wallet: IWallet['_id'];
 }
 
-const UserSchema = new Schema(
-  {
-    username: {
-      type: String,
-      lowercase: true,
-      minlength: 3,
-      maxlength: 20,
-      unique: true,
-      required: true,
-    },
+@Schema({ timestamps: true })
+export class UserSchema {
+  @ApiProperty()
+  @Prop({
+    unique: true,
+    minlength: 3,
+    maxlength: 20,
+    lowercase: true,
+    required: true,
+  })
+  username: string;
 
-    first_name: {
-      type: String,
-      lowercase: true,
-      minlength: 3,
-      maxlength: 20,
-      required: true,
-    },
-    last_name: {
-      type: String,
-      lowercase: true,
-      minlength: 3,
-      maxlength: 20,
-      required: true,
-    },
-    email: {
-      type: String,
-      lowercase: true,
-      maxlength: 200,
-      required: true,
-      trim: true,
-      unique: true,
-      match: [/\S+@\S+\.\S+/, 'is invalid'],
-    },
-    phone_number: {
-      type: Number,
-      maxlength: 11,
-      required: true,
-    },
-    password: {
-      type: String,
-      required: true,
-      trim: true,
-      minlength: 8,
-    },
-    wallet: {
-      type: Schema.Types.ObjectId,
-      ref: 'Wallet',
-    },
-    token: {
-      type: String,
-    },
-  },
-  { timestamps: true },
-);
+  @ApiProperty()
+  @Prop({ minlength: 3, maxlength: 20, lowercase: true, required: true })
+  first_name: string;
 
-UserSchema.pre<IUser>('save', async function (next) {
+  @ApiProperty()
+  @Prop({ minlength: 3, maxlength: 20, lowercase: true, required: true })
+  last_name: string;
+
+  @ApiProperty()
+  @Prop({
+    lowercase: true,
+    maxlength: 200,
+    required: true,
+    trim: true,
+    unique: true,
+    match: [/\S+@\S+\.\S+/, 'is invalid'],
+  })
+  email: string;
+
+  @ApiProperty()
+  @Prop({ required: true })
+  phone_number: number;
+
+  @ApiProperty()
+  @Prop({ trim: true, minlength: 8, required: true })
+  password: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Wallet' })
+  wallet: string;
+
+  @Prop()
+  token: string;
+}
+
+export const UserModel = SchemaFactory.createForClass(UserSchema);
+
+UserModel.pre<IUser>('save', async function (next) {
   try {
     if (!this.isModified('password')) {
       return next();
@@ -82,6 +75,3 @@ UserSchema.pre<IUser>('save', async function (next) {
     return next(err);
   }
 });
-
-export const UserModel = UserSchema;
-// export const UserModel = mongoose.model<IUser>('User', UserSchema);

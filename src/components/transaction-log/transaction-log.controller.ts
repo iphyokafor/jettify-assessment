@@ -23,13 +23,13 @@ export class TransactionLogController {
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.transactionLogService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.transactionLogService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return this.transactionLogService.findOne(id);
   }
 
   @Patch(':id')

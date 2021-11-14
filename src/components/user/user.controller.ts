@@ -16,9 +16,12 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthService } from '../auth/auth.service';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { UserValidatorPipe } from 'src/validation/validation-pipe/joi-validation-pipe';
@@ -32,7 +35,6 @@ export class UserController {
   ) {}
 
   @ApiCreatedResponse({ type: CreateUserDto })
-  @ApiNotFoundResponse()
   @ApiBadRequestResponse()
   @Post('register')
   @UsePipes(new UserValidatorPipe())
@@ -47,6 +49,10 @@ export class UserController {
     return { user, token };
   }
 
+  @ApiOkResponse({ type: CreateUserDto, description: 'Get user details by id' })
+  @ApiNotFoundResponse()
+  @ApiUnauthorizedResponse()
+  @ApiBearerAuth()
   @Get('user-details/:id')
   @UseGuards(AuthGuard('jwt'))
   async getUserDetails(@Param('id') id: string) {

@@ -1,9 +1,18 @@
-import { CreateWalletDto } from 'src/components/wallet/dto/create-wallet.dto';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateTransactionLogDto {
-  readonly wallet: CreateWalletDto;
+  @ApiProperty()
+  readonly wallet: string;
+
+  @ApiProperty()
   readonly amount: number;
+
+  @ApiProperty()
   readonly transaction_type: string;
+
+  @ApiProperty()
   readonly service: string;
+
+  @ApiProperty()
   readonly created_at: Date;
 }

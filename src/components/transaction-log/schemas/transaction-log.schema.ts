@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ApiProperty } from '@nestjs/swagger';
 import { IWallet } from 'src/components/wallet/schemas/wallet.schema';
-const { Schema } = mongoose;
 
 export interface ITransactionLog extends mongoose.Document {
   wallet: IWallet['_id'];
@@ -10,33 +11,28 @@ export interface ITransactionLog extends mongoose.Document {
   created_at: Date;
 }
 
-const TransactionLogSchema = new mongoose.Schema(
-  {
-    wallet: {
-      type: Schema.Types.ObjectId,
-      ref: 'Wallet',
-    },
+@Schema({ timestamps: true })
+export class TransactionLogSchema {
+  @ApiProperty()
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Wallet' })
+  wallet: string;
 
-    amount: {
-      type: Number,
-    },
+  @ApiProperty()
+  @Prop()
+  amount: number;
 
-    transaction_type: {
-      type: String,
-      enum: ['Funding', 'Payment'],
-      default: 'Funding',
-    },
+  @ApiProperty()
+  @Prop({ enum: ['Funding', 'Payment'], default: 'Funding' })
+  transaction_type: string;
 
-    service: {
-      type: String,
-      enum: ['Amazon', 'Netflix', 'Ebay', 'Jumia', 'None'],
-    },
+  @ApiProperty()
+  @Prop({ enum: ['Amazon', 'Netflix', 'Ebay', 'Jumia', 'None'] })
+  service: string;
 
-    created_at: {
-      type: Date,
-    },
-  },
-  { timestamps: true },
-);
+  @ApiProperty()
+  @Prop()
+  created_at: Date;
+}
 
-export const TransactionModel = TransactionLogSchema;
+export const TransactionModel =
+  SchemaFactory.createForClass(TransactionLogSchema);
