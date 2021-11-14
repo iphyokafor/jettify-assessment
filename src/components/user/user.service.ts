@@ -73,10 +73,6 @@ export class UserService {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
-
   sanitizeUser(user: IUser) {
     const sanitized = user.toObject();
     delete sanitized['password'];
