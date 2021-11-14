@@ -1,8 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { TransactionLogService } from './transaction-log.service';
 import { CreateTransactionLogDto } from './dto/create-transaction-log.dto';
 import { UpdateTransactionLogDto } from './dto/update-transaction-log.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('transaction logs')
 @Controller('transaction-log')
 export class TransactionLogController {
   constructor(private readonly transactionLogService: TransactionLogService) {}
@@ -23,7 +33,10 @@ export class TransactionLogController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTransactionLogDto: UpdateTransactionLogDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateTransactionLogDto: UpdateTransactionLogDto,
+  ) {
     return this.transactionLogService.update(+id, updateTransactionLogDto);
   }
 

@@ -14,7 +14,9 @@ import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { FundWalletDto } from './dto/fund-wallet.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { PaymentDto } from './dto/payment-dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('wallets')
 @Controller('wallet')
 export class WalletController {
   constructor(private readonly walletService: WalletService) {}
