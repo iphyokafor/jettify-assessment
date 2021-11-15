@@ -6,7 +6,6 @@ import * as mongoose from 'mongoose';
 
 import { LoginDto } from '../auth/dto/create-login.dto';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { Payload } from './interfaces/payload.interface';
 import { IWallet } from '../wallet/schemas/wallet.schema';
 import { IUser } from './schemas/user.schema';
@@ -61,7 +60,9 @@ export class UserService {
   }
 
   async findOneUser(id: string) {
-    const user = await this.userModel.findOne({ _id: id }).populate('wallet');
+    const user = await this.userModel.findOne({ _id: id }).populate({
+      path: 'wallet',
+    });
     if (!user) {
       throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
     }
@@ -69,12 +70,9 @@ export class UserService {
     return userDetails;
   }
 
-  findAll() {
-    return `This action returns all user`;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async findAll() {
+    const users = await this.userModel.find();
+    return users;
   }
 
   sanitizeUser(user: IUser) {

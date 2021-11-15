@@ -1,9 +1,7 @@
 import * as mongoose from 'mongoose';
-import * as bcrypt from 'bcrypt';
-import { IWallet } from '../../../components/wallet/schemas/wallet.schema';
-
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
+import { IWallet } from 'src/components/wallet/schemas/wallet.schema';
 
 export interface IUser extends mongoose.Document {
   username: string;
@@ -62,16 +60,3 @@ export class UserSchema {
 }
 
 export const UserModel = SchemaFactory.createForClass(UserSchema);
-
-UserModel.pre<IUser>('save', async function (next) {
-  try {
-    if (!this.isModified('password')) {
-      return next();
-    }
-    const hashed = await bcrypt.hash(this['password'], 10);
-    this['password'] = hashed;
-    return next();
-  } catch (err) {
-    return next(err);
-  }
-});
