@@ -22,9 +22,7 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
-
-# Jettify-Solution-Assignment
+## Jettify-Solution-Assignment
 
 The goal is to create a CRUD Server application with Nest.js written in TypeScript for a fintech solution to help users in Nigeria register and fund their accounts, after which they can make payments on any international website / platform (Amazon, Ebay, e.t.c). .
 
@@ -58,15 +56,15 @@ $ npm install
 
 bash
 
-# development
+## development
 
 $ npm run start
 
-# watch mode
+## watch mode
 
 $ npm run start:dev
 
-# production mode
+## production mode
 
 $ npm run start:prod
 
