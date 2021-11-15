@@ -19,5 +19,5 @@ export const createUserSchema = Joi.object({
       ),
     )
     .required(),
-  phone_number: Joi.number().integer().max(12).required(),
+  phone_number: Joi.number().required(),
 }).options({ abortEarly: true, allowUnknown: false });

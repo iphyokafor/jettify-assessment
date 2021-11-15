@@ -60,12 +60,18 @@ export class WalletService {
   }
 
   async makePayment(paymentDto: PaymentDto, id: string) {
-    const userId = await this.userModel.findOne({ _id: id });
     const { amount, service } = paymentDto;
-
+    const userId = await this.userModel.findOne({ _id: id });
+    if (!userId) {
+      throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
+    }
     const walletDetail = await this.walletModel.findOne({
       user: userId,
     });
+
+    if (!walletDetail) {
+      throw new HttpException('Wallet not found!', HttpStatus.NOT_FOUND);
+    }
 
     const { balance, user } = walletDetail;
 
@@ -106,8 +112,12 @@ export class WalletService {
     return `This action returns all wallet`;
   }
 
-  findOne(id: string) {
-    return this.walletModel.findOne({ _id: id });
+  async findOne(id: string) {
+    const walletId = await this.walletModel.findOne({ _id: id });
+    if (!walletId) {
+      throw new HttpException('Wallet not found!', HttpStatus.NOT_FOUND);
+    }
+    return walletId;
   }
 
   update(id: number, updateWalletDto: UpdateWalletDto) {

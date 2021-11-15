@@ -15,6 +15,7 @@ async function bootstrap() {
     .setTitle('Jettify-assessment API')
     .setDescription('All API endpoints for jettify assessment')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

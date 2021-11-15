@@ -61,7 +61,7 @@ export class UserService {
   }
 
   async findOneUser(id: string) {
-    const user = await this.userModel.findOne({ _id: id });
+    const user = await this.userModel.findOne({ _id: id }).populate('wallet');
     if (!user) {
       throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
     }
