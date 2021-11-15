@@ -23,5 +23,5 @@ export class BaseUserDto {
   password: string;
 
   @ApiProperty()
-  wallet: string;
+  wallet?: string;
 }
