@@ -32,15 +32,15 @@ $ npm install
 
 bash
 
-## development
+### development
 
 $ npm run start
 
-## watch mode
+### watch mode
 
 $ npm run start:dev
 
-## production mode
+### production mode
 
 $ npm run start:prod
 
