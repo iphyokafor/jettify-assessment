@@ -15,6 +15,7 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
@@ -62,11 +63,16 @@ export class UserController {
   @Get('user-details/:id')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
+  @ApiOkResponse({
+    type: CreateUserDto,
+    description: 'User details fetched successfully!',
+  })
   async getUserDetails(@Param('id') id: string) {
     return this.userService.findOneUser(id);
   }
 
   @Get('users')
+  @ApiOkResponse({ description: 'View all users' })
   async findAll() {
     return this.userService.findAll();
   }
