@@ -1,4 +1,5 @@
 import { forwardRef, Module } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -14,6 +15,28 @@ import { UserModel } from './schemas/user.schema';
     MongooseModule.forFeature([
       { name: 'User', schema: UserModel },
       { name: 'Wallet', schema: WalletModel },
+    ]),
+    MongooseModule.forFeatureAsync([
+      {
+        name: 'User',
+        useFactory: () => {
+          const schema = UserModel;
+          schema.pre('save', async function (next) {
+            try {
+              if (!this.isModified('password')) {
+                return next();
+              }
+              const hashed = await bcrypt.hash(this['password'], 10);
+              this['password'] = hashed;
+              return next();
+            } catch (err) {
+              return next(err);
+            }
+          });
+
+          return schema;
+        },
+      },
     ]),
   ],
 
