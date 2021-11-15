@@ -3,16 +3,12 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
   UseGuards,
   UsePipes,
-  Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthService } from '../auth/auth.service';
 import {
   ApiBadRequestResponse,
@@ -20,8 +16,8 @@ import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiQuery,
   ApiTags,
-  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { UserValidatorPipe } from 'src/validation/validation-pipe/joi-validation-pipe';
@@ -35,9 +31,9 @@ export class UserController {
     private readonly authService: AuthService,
   ) {}
 
+  @Post('register')
   @ApiCreatedResponse({ type: CreateUserDto })
   @ApiBadRequestResponse()
-  @Post('register')
   @UsePipes(new UserValidatorPipe())
   async register(@Body() createUserDto: CreateUserDto) {
     const user = await this.userService.create(createUserDto);
@@ -50,10 +46,10 @@ export class UserController {
     return { user, token };
   }
 
+  @Post('login')
   @ApiCreatedResponse({ type: LoginDto })
   @ApiNotFoundResponse()
   @ApiBadRequestResponse()
-  @Post('login')
   async login(@Body() loginDto: LoginDto) {
     const user = await this.userService.findByCredentials(loginDto);
     const payload = {
@@ -67,17 +63,18 @@ export class UserController {
 
   @Get('user-details/:id')
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    type: CreateUserDto,
+    description: 'User details fetched successfully!',
+  })
   async getUserDetails(@Param('id') id: string) {
     return this.userService.findOneUser(id);
   }
 
-  @Get()
-  findAll() {
+  @Get('users')
+  @ApiOkResponse({ type: CreateUserDto, isArray: true })
+  async findAll() {
     return this.userService.findAll();
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
   }
 }
