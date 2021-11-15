@@ -5,7 +5,6 @@ import { ITransactionLog } from '../transaction-log/schemas/transaction-log.sche
 import { IUser } from '../user/schemas/user.schema';
 import { FundWalletDto } from './dto/fund-wallet.dto';
 import { PaymentDto } from './dto/payment-dto';
-import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { IWallet } from './schemas/wallet.schema';
 
 @Injectable()
@@ -108,23 +107,11 @@ export class WalletService {
     return walletInfo;
   }
 
-  findAll() {
-    return `This action returns all wallet`;
-  }
-
   async findOne(id: string) {
     const walletId = await this.walletModel.findOne({ _id: id });
     if (!walletId) {
       throw new HttpException('Wallet not found!', HttpStatus.NOT_FOUND);
     }
     return walletId;
-  }
-
-  update(id: number, updateWalletDto: UpdateWalletDto) {
-    return `This action updates a #${id} wallet`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} wallet`;
   }
 }

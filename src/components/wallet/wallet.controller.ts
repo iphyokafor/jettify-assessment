@@ -3,15 +3,12 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
   UseGuards,
   Request,
   UsePipes,
 } from '@nestjs/common';
 import { WalletService } from './wallet.service';
-import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { FundWalletDto } from './dto/fund-wallet.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { PaymentDto } from './dto/payment-dto';
@@ -72,20 +69,5 @@ export class WalletController {
   @ApiBearerAuth()
   async getUserWalletDetails(@Param('id') id: string) {
     return this.walletService.findOne(id);
-  }
-
-  @Get()
-  findAll() {
-    return this.walletService.findAll();
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWalletDto: UpdateWalletDto) {
-    return this.walletService.update(+id, updateWalletDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.walletService.remove(+id);
   }
 }
