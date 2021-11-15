@@ -12,6 +12,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { AuthService } from '../auth/auth.service';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiTags,
@@ -60,6 +61,7 @@ export class UserController {
 
   @Get('user-details/:id')
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   async getUserDetails(@Param('id') id: string) {
     return this.userService.findOneUser(id);
   }
