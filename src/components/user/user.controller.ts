@@ -25,6 +25,7 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { UserValidatorPipe } from 'src/validation/validation-pipe/joi-validation-pipe';
+import { LoginDto } from '../auth/dto/create-login.dto';
 
 @ApiTags('users')
 @Controller('user')
@@ -49,10 +50,21 @@ export class UserController {
     return { user, token };
   }
 
-  @ApiOkResponse({ type: CreateUserDto, description: 'Get user details by id' })
+  @ApiCreatedResponse({ type: LoginDto })
   @ApiNotFoundResponse()
-  @ApiUnauthorizedResponse()
-  @ApiBearerAuth()
+  @ApiBadRequestResponse()
+  @Post('login')
+  async login(@Body() loginDto: LoginDto) {
+    const user = await this.userService.findByCredentials(loginDto);
+    const payload = {
+      userId: user._id,
+      walletId: user.wallet,
+    };
+
+    const token = await this.authService.signPayload(payload);
+    return { user, token };
+  }
+
   @Get('user-details/:id')
   @UseGuards(AuthGuard('jwt'))
   async getUserDetails(@Param('id') id: string) {
