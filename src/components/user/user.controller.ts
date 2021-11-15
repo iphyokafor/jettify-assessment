@@ -15,6 +15,8 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
@@ -29,9 +31,9 @@ export class UserController {
     private readonly authService: AuthService,
   ) {}
 
+  @Post('register')
   @ApiCreatedResponse({ type: CreateUserDto })
   @ApiBadRequestResponse()
-  @Post('register')
   @UsePipes(new UserValidatorPipe())
   async register(@Body() createUserDto: CreateUserDto) {
     const user = await this.userService.create(createUserDto);
@@ -44,10 +46,10 @@ export class UserController {
     return { user, token };
   }
 
+  @Post('login')
   @ApiCreatedResponse({ type: LoginDto })
   @ApiNotFoundResponse()
   @ApiBadRequestResponse()
-  @Post('login')
   async login(@Body() loginDto: LoginDto) {
     const user = await this.userService.findByCredentials(loginDto);
     const payload = {
@@ -62,11 +64,16 @@ export class UserController {
   @Get('user-details/:id')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
+  @ApiOkResponse({
+    type: CreateUserDto,
+    description: 'User details fetched successfully!',
+  })
   async getUserDetails(@Param('id') id: string) {
     return this.userService.findOneUser(id);
   }
 
   @Get('users')
+  @ApiOkResponse({ type: CreateUserDto, isArray: true })
   async findAll() {
     return this.userService.findAll();
   }
